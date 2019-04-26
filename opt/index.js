@@ -7,7 +7,7 @@ port = null
 // Get port of ngrok from ngrok.log
 function check(){
 	var log = fs.readFileSync('serveo.log', {encoding: 'utf-8'})
-	return log.split('\n')[2] === undefined;
+	return log.split('\n')[2] !== undefined;
 }
 
 const inter = setInterval(function(){
