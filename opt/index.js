@@ -3,7 +3,7 @@
 var fs = require('fs')
 var http = require('http')
 log = null
-ip = null
+ip = ''
 // Get port of ngrok from ngrok.log
 function check(){
 	var log = fs.readFileSync('serveo.log', {encoding: 'utf-8'})
