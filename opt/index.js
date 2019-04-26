@@ -12,9 +12,9 @@ function check(){
 
 const inter = setInterval(function(){
 	console.log("Checking for serveo.log")
-	if(check()){
+	if(check() && !log.includes('connect_to localhost port')){
 		log = fs.readFileSync('serveo.log', {encoding: 'utf-8'})
-		if(!log.includes('failed')){
+		if(!log.includes('Warning: remote port forwarding failed for listen port')){
 			
 			for (i in log){
 				if(log.split('\n')[i].includes('Forwarding TCP')){
