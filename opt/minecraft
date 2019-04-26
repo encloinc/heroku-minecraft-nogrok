@@ -48,7 +48,7 @@ serveo_pid=$!
 screen -X "logfile 1" -S "serveo" && sleep 1
 
 echo "Tailing log"
-eval "tail -f screenlog.0 &"
+eval "tail -f serveo.log &"
 tails_pid=$!
 
 
