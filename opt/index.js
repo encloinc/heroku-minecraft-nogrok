@@ -24,7 +24,7 @@ const inter = setInterval(function(){
 			}
 		}else{
 
-			ip = 'serveo failed, port specified is probably used'
+			ip = 'Serveo failed, port specified is already taken.'
 		}
 		start()
 		clearInterval(inter)
