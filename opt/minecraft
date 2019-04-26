@@ -45,12 +45,12 @@ tail_pid=$!
 
 if [ -z "$SERVEO_PORT" ]; then
 	echo "Starting Serveo with randomized port"
-	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
+	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -o "ServerAliveInterval=60" -R 0:localhost:${mc_port} serveo.net'
 	serveo_pid=$!
 
 else
 	echo "Starting Serveo with specified port $SERVEO_PORT"
-	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R $SERVEO_PORT:localhost:${mc_port} serveo.net'
+	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -o "ServerAliveInterval=60" -R $SERVEO_PORT:localhost:${mc_port} serveo.net'
 	serveo_pid=$!
 fi
 # Start he TCP tunnel
