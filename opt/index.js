@@ -16,7 +16,12 @@ const inter = setInterval(function(){
 		log = fs.readFileSync('serveo.log', {encoding: 'utf-8'})
 		if(!log.includes('failed')){
 			
-			ip = log.split('\n')[3].split(' ')[4]
+			for (i in log){
+				if(log.split('\n')[i].startsWith('Forwarding')){
+					ip = log.split('\n')[i].split(' ')[4]
+					break;
+				}
+			}
 		}else{
 
 			ip = 'serveo failed, port specified is probably used'
