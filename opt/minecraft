@@ -45,16 +45,21 @@ tail_pid=$!
 echo "Starting serveo"
 eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
 serveo_pid=$!
+screen -X "logfile 1" -S "serveo" && sleep 1
+
+echo "Tailing log"
+eval "tail -f screenlog.0 &"
+tails_pid=$!
 
 
 sigterm() {
   bin/sync
-  kill $serveo_pid $main_pid $sync_pid $tail_pid
+  kill $serveo_pid $main_pid $sync_pid $tail_pid $tails_pid
 }
 
 sigkill() {
   bin/sync
-  kill -9 $serveo_pid $main_pid $sync_pid $tail_pid; exit
+  kill -9 $serveo_pid $main_pid $sync_pid $tail_pid $tails_pid; exit
 }
 
 trap sigterm SIGTERM
