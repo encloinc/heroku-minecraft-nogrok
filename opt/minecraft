@@ -3,11 +3,6 @@
 mc_port=25566
 port=${1:-${PORT:-8080}}
 
-# Start the TCP tunnel
-serveo_cmd="screen -L -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net"
-echo "Starting serveo..."
-eval "$serveo_cmd | tee serveo2.log &"
-ngrok_pid=$!
 
 # Do an inline sync first, then start the background job
 echo "Starting sync..."
@@ -46,14 +41,20 @@ echo "Tailing log"
 eval "tail -f screenlog.0 &"
 tail_pid=$!
 
+# Start he TCP tunnel
+echo "Starting serveo"
+eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
+serveo_pid=$!
+
+
 sigterm() {
   bin/sync
-  kill $ngrok_pid $main_pid $sync_pid $tail_pid
+  kill $serveo_pid $main_pid $sync_pid $tail_pid
 }
 
 sigkill() {
   bin/sync
-  kill -9 $ngrok_pid $main_pid $sync_pid $tail_pid; exit
+  kill -9 $serveo_pid $main_pid $sync_pid $tail_pid; exit
 }
 
 trap sigterm SIGTERM
