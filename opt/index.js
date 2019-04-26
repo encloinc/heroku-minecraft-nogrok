@@ -17,7 +17,7 @@ const inter = setInterval(function(){
 		if(!log.includes('failed')){
 			
 			for (i in log){
-				if(log.split('\n')[i].startsWith('Forwarding')){
+				if(log.split('\n')[i].includes('Forwarding TCP')){
 					ip = log.split('\n')[i].split(' ')[4]
 					break;
 				}
