@@ -41,10 +41,20 @@ echo "Tailing log"
 eval "tail -f screenlog.0 &"
 tail_pid=$!
 
+
+
+if [ -z "$SERVEO_PORT" ]; then
+	echo "Starting Serveo with randomized port"
+	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
+	serveo_pid=$!
+
+else
+	echo "Starting Serveo with specified port $SERVEO_PORT"
+	eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R $SERVEO_PORT:localhost:${mc_port} serveo.net'
+	serveo_pid=$!
+fi
 # Start he TCP tunnel
-echo "Starting serveo"
-eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
-serveo_pid=$!
+
 screen -X "logfile 1" -S "serveo" && sleep 1
 
 echo "Tailing log"
