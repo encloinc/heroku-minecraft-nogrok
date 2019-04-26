@@ -12,15 +12,18 @@ function check(){
 
 const inter = setInterval(function(){
 	console.log("Checking for serveo.log")
-	if(check() && !log.includes('connect_to localhost port')){
+	if(check()){
 		log = fs.readFileSync('serveo.log', {encoding: 'utf-8'})
 		if(!log.includes('Warning: remote port forwarding failed for listen port')){
-			
-			for (i in log){
-				if(log.split('\n')[i].includes('Forwarding TCP')){
-					ip = log.split('\n')[i].split(' ')[4]
-					break;
+			if(!log.split('\n')[log.split('\n').length - 1].includes("connect_to localhost port")){
+				for (i in log){
+					if(log.split('\n')[i].includes('Forwarding TCP')){
+						ip = log.split('\n')[i].split(' ')[4]
+						break;
+					}
 				}
+			}else{
+				console.log('Serveo port retry')
 			}
 		}else{
 
