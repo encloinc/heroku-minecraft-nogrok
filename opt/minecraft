@@ -29,31 +29,27 @@ case $limit in
   ;;
 esac
 
-
-echo "Starting serveo"
-eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
-serveo_pid=$!
-screen -X "logfile 1" -S "serveo" && sleep 1
-
-
-echo "Tailing log"
-eval "tail -f serveo.log &"
-tails_pid=$!
-
 echo "Starting: minecraft ${mc_port}"
 eval "screen -L -h 2048 -dmS minecraft java -Xmx${heap} -Xms${heap} -Djline.terminal=jline.UnsupportedTerminal -jar minecraft.jar nogui"
 # Djline.terminal option is from https://bit.ly/2JdoBBi
 main_pid=$!
 
 # Flush the logfile every second, and ensure that the logfile exists
-screen -X "logfile 1" -S "minecraft" && sleep 1
+screen -X "logfile 1" && sleep 1
 
 echo "Tailing log"
 eval "tail -f screenlog.0 &"
 tail_pid=$!
 
 # Start he TCP tunnel
+echo "Starting serveo"
+eval 'screen -L -h 2048 -dmS serveo -Logfile serveo.log ssh -o "StrictHostKeyChecking=no" -R 0:localhost:${mc_port} serveo.net'
+serveo_pid=$!
+screen -X "logfile 1" -S "serveo" && sleep 1
 
+echo "Tailing log"
+eval "tail -f serveo.log &"
+tails_pid=$!
 
 
 sigterm() {
